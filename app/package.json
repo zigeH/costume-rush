@@ -1,0 +1,2 @@
+{ "name": "costume-rush-app", "private": true, "type": "module",
+  "dependencies": { "@relaycast/sdk": "latest" } }

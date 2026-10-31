@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Arribo · Procurement Console</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root{
+  --bg:#f5f6f8; --panel:#fff; --line:#e3e6eb; --ink:#14171c; --ink2:#5b6370; --ink3:#8b93a1;
+  --accent:#1f5eff; --ok:#12805c; --okbg:#e6f4ee; --warn:#b25e00; --warnbg:#fff3e0;
+  --bad:#b42318; --badbg:#fdecea; --ghost:#6b3fd1; --ghostbg:#f0eafd; --blue:#1f5eff; --bluebg:#e9efff;
+  --mono:ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:13px/1.4 -apple-system,BlinkMacSystemFont,"Inter","Segoe UI",sans-serif}
+header{display:flex;align-items:center;gap:16px;padding:10px 18px;background:#0f1320;color:#fff}
+header .logo{font-weight:700;letter-spacing:.3px;font-size:15px}
+header .logo span{color:#ff8a1f}
+header .crumb{color:#aab3c5}
+header .grow{flex:1}
+.sys{display:flex;gap:6px}
+.sb{font-size:11px;padding:3px 8px;border-radius:12px;background:#1c2236;color:#aab3c5;white-space:nowrap}
+.sb i{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px;background:#5b6370}
+.sb.on i{background:#2bd67b;box-shadow:0 0 6px #2bd67b} .sb.warn i{background:#ffb020} .sb.bad i{background:#ff4d4f}
+.sb b{color:#fff;font-weight:600}
+header .crumb,header .clock,header button{white-space:nowrap}
+header .clock{font-family:var(--mono);background:#1c2236;padding:5px 10px;border-radius:6px}
+header .clock b{color:#ff8a1f}
+header select,header button{font:inherit}
+.mode{color:#aab3c5;font-size:12px}
+button{cursor:pointer;border:1px solid var(--line);background:#fff;border-radius:6px;padding:6px 12px;font:inherit}
+button.primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+button:disabled{opacity:.5;cursor:default}
+main{display:grid;grid-template-columns:1fr 360px;gap:12px;padding:12px 18px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:8px}
+.panel h3{margin:0;padding:9px 12px;font-size:12px;text-transform:uppercase;letter-spacing:.6px;color:var(--ink2);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px}
+.panel h3 .r{margin-left:auto;text-transform:none;letter-spacing:0;font-weight:400;color:var(--ink3)}
+/* spec */
+.spec{display:grid;grid-template-columns:repeat(7,auto) 1fr auto;gap:6px 18px;align-items:end;padding:10px 12px}
+.spec label{display:block;font-size:11px;color:var(--ink3);margin-bottom:2px}
+.spec input{font:inherit;border:1px solid var(--line);border-radius:5px;padding:4px 6px;width:96px}
+.spec .val{font-weight:600}
+.tag{display:inline-block;border:1px solid var(--line);border-radius:4px;padding:1px 6px;margin-right:4px;font-size:12px;background:#fafbfc}
+/* kpis */
+.kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin:12px 0}
+.kpi{padding:10px 12px}
+.kpi .k{font-size:11px;color:var(--ink3);text-transform:uppercase;letter-spacing:.5px}
+.kpi .v{font-size:22px;font-weight:650;font-variant-numeric:tabular-nums;margin-top:2px}
+.kpi .s{font-size:11px;color:var(--ink3)}
+.kpi.bad .v{color:var(--bad)} .kpi.good .v{color:var(--ok)} .kpi.ghost .v{color:var(--ghost)}
+/* table */
+table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+th{font-size:11px;text-align:left;color:var(--ink3);font-weight:500;padding:6px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:6px 8px;border-bottom:1px solid #f0f2f5;vertical-align:top}
+tr.row{transition:background .4s}
+tr.flash{background:#fffbe6}
+tr.dim td{color:var(--ink3)}
+.sname{font-weight:600}
+.sub{font-size:11px;color:var(--ink3)}
+.raw{font-size:11px;color:var(--ink2);max-width:260px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:var(--mono)}
+.ch{font-size:10px;font-weight:600;border-radius:3px;padding:1px 5px;background:#eef0f4;color:var(--ink2);text-transform:uppercase}
+.num{text-align:right;white-space:nowrap}
+.pill{display:inline-block;border-radius:10px;padding:1px 8px;font-size:11px;font-weight:600;white-space:nowrap}
+.p-waiting{background:#f0f2f5;color:var(--ink3)}
+.p-parsing{background:var(--bluebg);color:var(--blue)}
+.p-quoted{background:#eef0f4;color:var(--ink)}
+.p-checking{background:var(--warnbg);color:var(--warn)}
+.p-verified{background:var(--okbg);color:var(--ok)}
+.p-ghost{background:var(--ghostbg);color:var(--ghost)}
+.p-excluded{background:var(--badbg);color:var(--bad)}
+.p-ordered{background:var(--ok);color:#fff}
+.p-negotiating{background:var(--bluebg);color:var(--blue)}
+.ok{color:var(--ok);font-weight:700} .no{color:var(--bad);font-weight:700}
+.score{font-weight:600}
+.score.lo{color:var(--bad)} .score.na{color:var(--ink3);font-weight:400}
+.note{font-size:11px;color:var(--ink2);margin-top:2px}
+.ghoststamp{position:relative}
+.stamp{display:inline-block;transform:rotate(-6deg);border:2px solid var(--ghost);color:var(--ghost);font-weight:800;font-size:11px;padding:0 5px;border-radius:3px;letter-spacing:1px;background:var(--ghostbg)}
+/* side */
+.side{display:flex;flex-direction:column;gap:12px}
+.feed{height:420px;overflow:auto;padding:6px 10px;font-size:12px}
+.msg{padding:5px 0;border-bottom:1px dashed #eef0f4}
+.msg .who{font-weight:600}
+.msg .who.arribo{color:var(--accent)} .msg .who.tpl{color:var(--warn)} .msg .who.sys{color:var(--ink3)}
+.msg .t{font-family:var(--mono);color:var(--ink3);font-size:10px;margin-right:6px}
+.msg .thr{color:var(--ink3);font-size:10px;margin-left:4px}
+.po{padding:8px 12px;border-bottom:1px solid #f0f2f5;font-size:12px}
+.po .id{font-family:var(--mono);font-weight:600}
+.po .meta{color:var(--ink3);font-size:11px}
+.lower{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.decision{padding:10px 12px}
+.opt{display:grid;grid-template-columns:70px 1fr 1fr 1fr;gap:8px;padding:8px;border:1px solid var(--line);border-radius:6px;margin-bottom:6px}
+.opt.win{border-color:var(--ok);background:var(--okbg)}
+.opt.lose{opacity:.75}
+.opt b{display:block;font-size:15px}
+.opt .l{font-size:10px;color:var(--ink3);text-transform:uppercase}
+.empty{color:var(--ink3);padding:14px 12px;font-size:12px}
+svg text{font:11px -apple-system,sans-serif;fill:var(--ink2)}
+/* settlement */
+#settle{position:fixed;inset:0;background:rgba(10,12,20,.72);display:none;align-items:center;justify-content:center;z-index:9}
+#settle .card{background:#fff;border-radius:12px;width:900px;padding:22px 26px}
+#settle h2{margin:0 0 4px} #settle .sub{margin-bottom:14px}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.col{border:1px solid var(--line);border-radius:10px;padding:14px}
+.col h4{margin:0 0 8px;font-size:14px}
+.col.a{border-color:var(--ok)} .col.h{border-color:var(--bad)}
+.line{display:flex;justify-content:space-between;padding:3px 0;font-variant-numeric:tabular-nums}
+.line.big{font-size:20px;font-weight:700;border-top:1px solid var(--line);margin-top:6px;padding-top:8px}
+.pos{color:var(--ok)} .neg{color:var(--bad)}
+.zombies{font-size:22px;line-height:1.1;margin-top:8px;word-break:break-all;min-height:26px}
+.why{font-size:12px;color:var(--ink2);margin-top:8px}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">arribo<span>.</span></div>
+  <div class="crumb">Procurement / <b id="rfqId">RFQ-2026-1027</b></div>
+  <div class="grow"></div>
+  <div class="sys" id="sys"></div>
+  <div class="clock" id="clock">Oct 27 · day 0/4</div>
+  <span class="mode">Source:</span>
+  <select id="mode"><option value="live">Live (agents)</option><option value="replay">Replay</option></select>
+  <button id="startBtn" class="primary">Send RFQ</button>
+  <button id="resetBtn">Reset</button>
+</header>
+
+<main>
+<section>
+  <div class="panel">
+    <h3>Buyer spec <span class="r" id="specStatus">draft</span></h3>
+    <div class="spec">
+      <div><label>Item</label><div class="val" id="spItem">Glowing Pumpkin Head · GPH-01</div></div>
+      <div><label>Quantity (pcs)</label><input id="spQty" type="number" value="1250"></div>
+      <div><label>Max landed $/pc</label><input id="spMax" type="number" value="18" step="0.5"></div>
+      <div><label>Deliver to</label><div class="val">LA warehouse</div></div>
+      <div><label>Deliver by</label><div class="val">Oct 31</div></div>
+      <div><label>Max deposit</label><div class="val">30%</div></div>
+      <div><label>Retail</label><div class="val">$39</div></div>
+      <div><label>Must-haves</label><span class="tag">AA batteries only</span><span class="tag">Flame-retardant + test report</span></div>
+      <div></div>
+    </div>
+  </div>
+
+  <div class="kpis">
+    <div class="panel kpi"><div class="k">Quotes parsed</div><div class="v" id="kQuotes">0/12</div><div class="s" id="kQuotesS">7 formats · 3 languages</div></div>
+    <div class="panel kpi good"><div class="k">Qualified</div><div class="v" id="kQual">–</div><div class="s">meets spec, date, score</div></div>
+    <div class="panel kpi ghost"><div class="k">Ghost stock caught</div><div class="v" id="kGhost">0</div><div class="s" id="kGhostS">verified via 3PL</div></div>
+    <div class="panel kpi"><div class="k">Committed</div><div class="v" id="kComm">0</div><div class="s" id="kCommS">of 1,250 pcs</div></div>
+    <div class="panel kpi"><div class="k">Avg landed</div><div class="v" id="kAvg">–</div><div class="s">target ≤ $18.00</div></div>
+    <div class="panel kpi bad"><div class="k">Deposit at risk</div><div class="v" id="kRisk">$0</div><div class="s" id="kRiskS">unverified suppliers</div></div>
+  </div>
+
+  <div class="panel">
+    <h3>Supplier comparison <span class="r">landed = unit + freight + duty, normalized to USD/pc · FX ¥7.2</span></h3>
+    <table>
+      <thead><tr>
+        <th>#</th><th>Supplier</th><th>Original message</th><th class="num">Qty</th><th class="num">Landed $/pc</th>
+        <th>ETA LA</th><th class="num">Deposit</th><th>Spec</th><th class="num">Score</th><th>Status</th>
+      </tr></thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+
+  <div class="lower">
+    <div class="panel">
+      <h3>Freight decision <span class="r" id="decWho">—</span></h3>
+      <div class="decision" id="decision"><div class="empty">No freight tradeoff yet.</div></div>
+    </div>
+    <div class="panel">
+      <h3>Inventory forecast · LA <span class="r">arrivals vs demand (1,200)</span></h3>
+      <div id="chart" style="padding:6px 8px"></div>
+    </div>
+  </div>
+</section>
+
+<aside class="side">
+  <div class="panel">
+    <h3>Purchase orders <span class="r" id="poSum"></span></h3>
+    <div id="pos"><div class="empty">No POs yet.</div></div>
+  </div>
+  <div class="panel">
+    <h3>Activity · #costume-rush <span class="r" id="feedN"></span></h3>
+    <div class="feed" id="feed"></div>
+  </div>
+</aside>
+</main>
+
+<div id="settle"><div class="card">
+  <h2>Season report · Halloween 2026</h2>
+  <div class="sub">Midnight, Oct 31. Unsold costumes are dead stock (zombie inventory).</div>
+  <div class="cols">
+    <div class="col a"><h4>Arribo</h4><div id="resA"></div></div>
+    <div class="col h"><h4>Gut-feel buyer <span class="sub">(cheapest quote, trusts claims)</span></h4><div id="resH"></div></div>
+  </div>
+  <div style="text-align:right;margin-top:14px"><button onclick="document.getElementById('settle').style.display='none'">Close</button></div>
+</div></div>
+
+<script>
+const DAYS=["Oct 27","Oct 28","Oct 29","Oct 30","Oct 31","Nov 1+"];
+const $=id=>document.getElementById(id);
+const money=(n,d=0)=>(n<0?"−$":"$")+Math.abs(n).toLocaleString("en-US",{minimumFractionDigits:d,maximumFractionDigits:d});
+let CFG=null, S=null, prevStatus={};
+
+function emptyState(){
+  return {phase:"pick",day:0,spec:null,feed:[],pos:[],decision:null,result:null,
+    suppliers:(CFG?.suppliers||[]).map(s=>({id:s.id,name:s.name,city:s.city,channel:s.channel,lang:s.lang,score:s.score,status:"waiting",raw:"",quote:null,specOk:null,note:""}))};
+}
+
+/* ---------------- render ---------------- */
+function render(){
+  if(!S) return;
+  $("clock").innerHTML=`${DAYS[Math.min(S.day,5)]} · day <b>${Math.min(S.day,4)}</b>/4 · ${S.phase}`;
+  $("specStatus").textContent=S.phase==="pick"?"draft":"sent to 12 suppliers";
+  const sup=S.suppliers;
+  const parsed=sup.filter(s=>s.quote||s.status==="excluded"&&s.raw).length;
+  $("kQuotes").textContent=`${parsed}/${sup.length}`;
+  const qual=sup.filter(s=>["verified","ordered","negotiating"].includes(s.status)).length;
+  $("kQual").textContent=S.phase==="pick"?"–":qual;
+  const ghosts=sup.filter(s=>s.status==="ghost");
+  $("kGhost").textContent=ghosts.length;
+  const saved=ghosts.reduce((a,s)=>a+(s.quote?Math.round(s.quote.qty*s.quote.unitUsd*(s.quote.depositPct||30)/100):0),0);
+  $("kGhostS").textContent=saved?`${money(saved)} deposit saved`:"verified via 3PL";
+  const comm=S.pos.reduce((a,p)=>a+p.qty,0);
+  const target=S.spec?.quantity||1250;
+  $("kComm").textContent=comm.toLocaleString();
+  $("kCommS").textContent=`of ${target.toLocaleString()} pcs`;
+  $("kAvg").textContent=comm?money(S.pos.reduce((a,p)=>a+p.qty*p.unitUsd,0)/comm,2):"–";
+  const risk=sup.filter(s=>["quoted","checking"].includes(s.status)&&s.quote&&(s.score==null||s.score<60))
+    .reduce((a,s)=>a+s.quote.qty*s.quote.unitUsd*(s.quote.depositPct||0)/100,0);
+  $("kRisk").textContent=money(Math.round(risk));
+  $("kRiskS").textContent=risk?"awaiting verification":"none outstanding";
+
+  const tb=$("tbody"); tb.innerHTML="";
+  sup.forEach((s,i)=>{
+    const q=s.quote, tr=document.createElement("tr");
+    tr.className="row"+(["excluded","ghost"].includes(s.status)?" dim":"");
+    if(prevStatus[s.id]&&prevStatus[s.id]!==s.status){tr.classList.add("flash");setTimeout(()=>tr.classList.remove("flash"),900)}
+    prevStatus[s.id]=s.status;
+    const spec=s.specOk?Object.entries(s.specOk).map(([k,v])=>`<span class="${v?"ok":"no"}" title="${k}">${v?"✓":"✕"}</span>`).join(" "):"<span class='sub'>–</span>";
+    const sc=s.score==null?`<span class="score na">no record</span>`:`<span class="score ${s.score<70?"lo":""}">${s.score}</span>`;
+    tr.innerHTML=`<td class="sub">S${i+1}</td>
+      <td><div class="sname">${s.name}</div><div class="sub">${s.city} · <span class="ch">${s.channel}</span> ${s.lang}</div></td>
+      <td><div class="raw" title="${(s.raw||"").replace(/"/g,"&quot;")}">${s.raw||"<span class='sub'>awaiting reply…</span>"}</div></td>
+      <td class="num">${q?q.qty.toLocaleString():"–"}</td>
+      <td class="num">${q?`<b>${money(q.unitUsd,2)}</b><div class="sub">${q.breakdown||""}</div>`:"–"}</td>
+      <td>${q?.etaLabel||"–"}</td>
+      <td class="num">${q?(q.depositPct||0)+"%":"–"}</td>
+      <td>${spec}</td>
+      <td class="num">${sc}</td>
+      <td>${s.status==="ghost"?'<span class="stamp">👻 GHOST STOCK</span>':`<span class="pill p-${s.status}">${s.status}</span>`}${window.voiceBtn?voiceBtn(s):""}${s.note?`<div class="note">${s.note}</div>`:""}</td>`;
+    tb.appendChild(tr);
+  });
+
+  // POs
+  if(S.pos.length){
+    $("pos").innerHTML=S.pos.map(p=>{const s=sup.find(x=>x.id===p.supplierId);return `<div class="po">
+      <div><span class="id">${p.id}</span> · <b>${s?.name||p.supplierId}</b> <span class="pill ${p.status==="arrived"?"p-ordered":"p-checking"}" style="float:right">${p.status}</span></div>
+      <div>${p.qty.toLocaleString()} pcs × ${money(p.unitUsd,2)} = <b>${money(p.qty*p.unitUsd)}</b> · ${p.mode||""}</div>
+      <div class="meta">${p.carrier||""} · ${p.tracking||""} · ETA ${DAYS[p.etaDay]} · pay 30% / 70% on delivery</div></div>`}).join("");
+    $("poSum").textContent=`${S.pos.length} POs · ${money(S.pos.reduce((a,p)=>a+p.qty*p.unitUsd,0))}`;
+  } else {$("pos").innerHTML=`<div class="empty">No POs yet.</div>`;$("poSum").textContent=""}
+
+  // feed
+  const f=$("feed"), atBottom=f.scrollTop+f.clientHeight>=f.scrollHeight-30;
+  f.innerHTML=S.feed.map(m=>{const cls=m.from==="arribo"?"arribo":m.from==="3pl"?"tpl":m.from==="system"?"sys":"";
+    const nm=m.from==="arribo"?"Arribo":m.from==="3pl"?"SpookyLogistics (3PL)":m.from==="system"?"system":(sup.find(s=>s.id===m.from)?.name||m.from);
+    return `<div class="msg"><span class="t">${m.t||""}</span><span class="who ${cls}">${nm}</span>${m.thread?`<span class="thr">↳ thread ${m.thread}</span>`:""}<div>${esc(m.text)}</div></div>`}).join("");
+  if(atBottom) f.scrollTop=f.scrollHeight;
+  $("feedN").textContent=`${S.feed.length} msgs`;
+
+  renderDecision(); renderChart(); renderSys();
+  if(S.result && S.phase==="settled") showSettle();
+}
+function renderSys(){
+  const el=$("sys"); if(!el) return;
+  if($("mode").value==="replay"||!S.sys){el.innerHTML=`<span class="sb"><i></i>replay · no live services</span>`;return}
+  const o=S.sys.openai,r=S.sys.relay,d=S.sys.durable;
+  const oc=o.status==="live"?(o.fallbacks?"warn":"on"):o.status==="checking"?"":"bad";
+  const rc=r.status==="connected"?(r.failed?"warn":"on"):"bad";
+  el.innerHTML=`<span class="sb ${oc}" title="${esc(o.lastError||"")}"><i></i>OpenAI <b>${o.status}</b> · ${o.model} · ${o.ok}/${o.calls} calls${o.lastMs?` · ${(o.lastMs/1000).toFixed(1)}s`:""}${o.fallbacks?` · ${o.fallbacks} fallback`:""}</span>
+  <span class="sb ${rc}"><i></i>Relaycast <b>${r.status}</b> · ${r.agents} agents · ${r.sent} msgs</span>
+  <span class="sb ${d.kind==="terse"?"on":"warn"}"><i></i>${d.kind==="terse"?"Terse <b>durable actor</b>":"Local <b>journal</b>"}</span>`;
+}
+function esc(t){return String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;")}
+
+function renderDecision(){
+  const d=S.decision;
+  if(!d){$("decision").innerHTML=`<div class="empty">No freight tradeoff yet.</div>`;$("decWho").textContent="—";return}
+  $("decWho").textContent=d.supplierName||"";
+  $("decision").innerHTML=d.options.map(o=>`<div class="opt ${d.chosen?(d.chosen===o.mode?"win":"lose"):""}">
+    <div><span class="l">mode</span><b>${o.label}</b></div>
+    <div><span class="l">landed $/pc</span><b>${money(o.landed,2)}</b></div>
+    <div><span class="l">arrives LA</span><b>${o.etaLabel}</b></div>
+    <div><span class="l">margin / pc sellable</span><b class="${o.sellable?"pos":"neg"}">${o.sellable?money(39-o.landed,2):"$0 · after Halloween"}</b></div></div>`).join("")
+    +(d.reason?`<div class="note" style="margin-top:4px">${d.reason}</div>`:"");
+}
+
+function renderChart(){
+  const W=430,H=170,pl=40,pb=24,pt=10;
+  const target=S.spec?.quantity||1250, demand=1200, max=Math.max(1600,target);
+  const cum=[0,0,0,0,0,0];
+  const live=S.pos.filter(p=>p.status!=="cancelled");
+  live.forEach(p=>{if(p.etaDay>4)cum[5]+=p.qty;else for(let d=p.etaDay;d<5;d++)cum[d]+=p.qty});
+  const arrived=[0,0,0,0,0,0];
+  live.filter(p=>p.status==="arrived").forEach(p=>{if(p.etaDay>4)arrived[5]+=p.qty;else for(let d=p.etaDay;d<5;d++)arrived[d]+=p.qty});
+  const x=i=>pl+i*((W-pl-10)/6)+6, bw=(W-pl-10)/6-12, y=v=>pt+(H-pt-pb)*(1-v/max);
+  let s=`<svg width="${W}" height="${H}">`;
+  [0,400,800,1200,1600].forEach(v=>{s+=`<line x1="${pl}" x2="${W-6}" y1="${y(v)}" y2="${y(v)}" stroke="#eef0f4"/><text x="${pl-6}" y="${y(v)+4}" text-anchor="end">${v}</text>`});
+  DAYS.forEach((d,i)=>{
+    s+=`<rect x="${x(i)}" y="${y(cum[i])}" width="${bw}" height="${y(0)-y(cum[i])}" fill="${i<5?"#c9d6ff":"#f3c7c3"}"/>`;
+    s+=`<rect x="${x(i)}" y="${y(arrived[i])}" width="${bw}" height="${y(0)-y(arrived[i])}" fill="${i<5?"#1f5eff":"#b42318"}"/>`;
+    s+=`<text x="${x(i)+bw/2}" y="${H-8}" text-anchor="middle">${d}</text>`;
+  });
+  s+=`<line x1="${pl}" x2="${W-6}" y1="${y(demand)}" y2="${y(demand)}" stroke="#ff8a1f" stroke-dasharray="4 3"/><text x="${W-8}" y="${y(demand)-4}" text-anchor="end" style="fill:#ff8a1f">demand 1,200</text>`;
+  s+=`<line x1="${x(5)-6}" x2="${x(5)-6}" y1="${pt}" y2="${y(0)}" stroke="#b42318" stroke-dasharray="2 3"/>`;
+  s+=`</svg><div class="sub">dark = arrived · light = on order · red = arrives after Halloween</div>`;
+  $("chart").innerHTML=s;
+}
+
+function pnl(r){
+  return `<div class="line"><span>Units arrived by Oct 31</span><b>${r.arrived.toLocaleString()}</b></div>
+  <div class="line"><span>Sold @ $39</span><b>${r.sold.toLocaleString()}</b></div>
+  <div class="line"><span>Revenue</span><b>${money(r.revenue)}</b></div>
+  <div class="line"><span>Cost of goods</span><b>${money(-r.cogs)}</b></div>
+  <div class="line"><span>Deposits lost to ghost suppliers</span><b class="${r.lostDepositUsd?"neg":""}">${money(-r.lostDepositUsd)}</b></div>
+  <div class="line"><span>Dead stock (zombies)</span><b>${r.zombies.toLocaleString()}</b></div>
+  <div class="line"><span>Stockouts (lost sales)</span><b>${Math.max(0,1200-r.sold).toLocaleString()}</b></div>
+  <div class="line big"><span>Profit</span><span class="${r.profitUsd>=0?"pos":"neg"}">${money(r.profitUsd)}</span></div>
+  <div class="zombies" title="each 🧟 = 50 unsold units">${"🧟".repeat(Math.round(r.zombies/50))}</div>
+  ${r.why?`<div class="why">${r.why}</div>`:""}`;
+}
+let settleShown=false;
+function showSettle(){ if(settleShown) return; settleShown=true;
+  $("resA").innerHTML=pnl(S.result.arribo); $("resH").innerHTML=pnl(S.result.human);
+  $("settle").style.display="flex";
+}
+
+/* ---------------- live mode (server SSE) ---------------- */
+let es=null;
+function connectLive(){
+  if(es) es.close();
+  es=new EventSource("/events");
+  es.onmessage=e=>{const st=JSON.parse(e.data); if(st&&st.suppliers){S=st;render()}};
+  es.onerror=()=>{$("clock").innerHTML+=" · <span style='color:#ff8a1f'>reconnecting…</span>"};
+}
+async function sendCmd(cmd){
+  await fetch("/api/command",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(cmd)});
+}
+function currentSpec(){
+  return {...CFG.spec,quantity:+$("spQty").value,targetLandedUsdPerPc:+$("spMax").value};
+}
+
+/* ---------------- replay mode (no backend) ---------------- */
+let timers=[];
+function sched(ms,fn){timers.push(setTimeout(()=>{fn();render()},ms))}
+function clearReplay(){timers.forEach(clearTimeout);timers=[]}
+function sup(id){return S.suppliers.find(s=>s.id===id)}
+function feed(from,text,thread){S.feed.push({t:DAYS[Math.min(S.day,5)].replace("Oct ","10/"),from,text,thread});if(S.feed.length>60)S.feed.shift()}
+const R={ // precomputed landed quotes (what the extraction step produces)
+ s1:{qty:400,unitUsd:24,breakdown:"$24 delivered",etaLabel:"Oct 28 (ground)",depositPct:0},
+ s2:{qty:1500,unitUsd:14.03,breakdown:"¥65 FOB + ¥36 air",etaLabel:"Nov 1 (quoted 5d)",depositPct:30},
+ s3:{qty:2000,unitUsd:11,breakdown:"$11 delivered (claimed)",etaLabel:"Oct 28 (claimed)",depositPct:30},
+ s4:{qty:300,unitUsd:26,breakdown:"$26 delivered",etaLabel:"Oct 29",depositPct:0},
+ s5:{qty:2000,unitUsd:9.06,breakdown:"¥58 EXW + sea",etaLabel:"Nov 15 (sea)",depositPct:30},
+ s6:{qty:800,unitUsd:13,breakdown:"$13 DDP LA",etaLabel:"Oct 31",depositPct:50},
+ s7:{qty:150,unitUsd:35,breakdown:"$35 delivered",etaLabel:"Oct 28",depositPct:0},
+ s8:{qty:1000,unitUsd:11,breakdown:"$10 FOB + sea",etaLabel:"Nov 12 (sea)",depositPct:30},
+ s9:{qty:3000,unitUsd:9,breakdown:"$9 delivered (claimed)",etaLabel:"Oct 29 (claimed)",depositPct:30},
+ s10:{qty:1200,unitUsd:15.97,breakdown:"100 dz × ¥1380/dz incl. air",etaLabel:"Oct 30 (air)",depositPct:30},
+ s11:{qty:600,unitUsd:15,breakdown:"$15 incl. truck",etaLabel:"Oct 30 (truck)",depositPct:30},
+ s12:null};
+function startReplay(){
+  clearReplay(); settleShown=false; $("settle").style.display="none";
+  S=emptyState(); S.phase="rush"; S.spec=currentSpec();
+  feed("arribo",`RFQ-2026-1027 sent to 12 suppliers: ${S.spec.item} ×${S.spec.quantity}, LA by Oct 31, landed ≤ $${S.spec.targetLandedUsdPerPc}, AA batteries, flame report, deposit ≤ 30%.`);
+  render();
+  let t=600;
+  CFG.suppliers.forEach((c,i)=>{
+    const raw=c.opening.replace("{item}",CFG.spec.item);
+    sched(t+i*420,()=>{const s=sup(c.id);s.raw=raw;s.status="parsing";feed(c.id,raw)});
+    sched(t+i*420+900,()=>{const s=sup(c.id);
+      if(c.human){s.status="excluded";s.note="live on Slack (Live mode only)";return}
+      if(!R[c.id]){s.status="excluded";s.note="sold out";return}
+      s.quote={...R[c.id]};s.specOk=c.compliance;s.status="quoted";});
+  });
+  t+=12*420+1400;
+  // screening
+  sched(t,()=>{feed("arribo","Screening 11 quotes against spec, delivery date, supplier history.");
+    const ex={s4:"spec: CR2032 coin cell",s7:"spec: no flame test report",s5:"sea: arrives Nov 15",s8:"sea: arrives Nov 12",s6:"score 64 · history of short-shipping",s1:"over budget $24 > $18 · standby"};
+    Object.entries(ex).forEach(([id,n])=>{const s=sup(id);s.status="excluded";s.note=n});});
+  // verification
+  t+=1500;
+  sched(t,()=>{["s3","s9"].forEach(id=>{const s=sup(id);s.status="checking";s.note="no record · price < 60% of avg"});
+    feed("arribo","BooSupply, GhostlyGoods: price is <60% of market and no history. Requesting warehouse confirmation.");});
+  sched(t+900,()=>{feed("s3","Stock is 100% real!! Deposit today locks it, we have many buyers.","s3")});
+  sched(t+1500,()=>{feed("arribo","@SpookyLogistics please confirm on-hand inventory for BooSupply (2,000 pcs) and GhostlyGoods (3,000 pcs).")});
+  sched(t+2600,()=>{feed("3pl","BooSupply: No inventory on record for this account. GhostlyGoods: No inventory on record for this account.")});
+  sched(t+3000,()=>{["s3","s9"].forEach(id=>{const s=sup(id);s.status="ghost";s.note="3PL: no inventory on record"});
+    feed("arribo","Ghost stock confirmed. Excluded BooSupply and GhostlyGoods. $14,700 in deposits protected.")});
+  // negotiation with s2
+  t+=3800;
+  sched(t,()=>{const s=sup("s2");s.status="negotiating";s.note="history: delivers early 2 of 3 yrs";
+    feed("arribo","义乌宏盛：你们 2023、2024 都比报价提前交货。3 天空运到洛杉矶可以吗？加急费多少？","s2")});
+  sched(t+1400,()=>{feed("s2","老板查得真细😅 可以的，加急空运 3 天到，每个加 ¥7，最多给你 250 个加急。","s2")});
+  sched(t+2000,()=>{S.decision={supplierName:"Yiwu Hongsheng · 250 pcs",options:[
+      {mode:"sea",label:"Sea",landed:9.53,etaLabel:"Nov 14",sellable:false},
+      {mode:"air",label:"Air (quoted)",landed:14.03,etaLabel:"Nov 1",sellable:false},
+      {mode:"air_rush",label:"Air rush",landed:15.0,etaLabel:"Oct 30",sellable:true}]}});
+  sched(t+3200,()=>{S.decision.chosen="air_rush";S.decision.reason="Sea saves $5.47/pc but lands after Halloween → every unit becomes dead stock. Air rush: $24.00 margin/pc.";
+    const s=sup("s2");s.quote={...s.quote,unitUsd:15.0,breakdown:"¥65 + ¥43 rush air",etaLabel:"Oct 30 (rush air)"};s.status="verified";
+    ["s10","s11"].forEach(id=>{sup(id).status="verified"});});
+  // allocation + POs
+  t+=4200;
+  const mk=(n,sid,qty,unit,mode,carrier,trk)=>({id:"ARB-2026-10"+n,supplierId:sid,qty,unitUsd:unit,etaDay:3,status:"placed",mode,carrier,tracking:trk});
+  sched(t,()=>{feed("arribo","Allocation: rank by landed × risk, cap 40% per supplier → Lumi 500, Fábrica Norte 500, Hongsheng 250 (rush).")});
+  sched(t+700,()=>{S.pos.push(mk(41,"s10",500,15.97,"air","Cathay Cargo","160-48213377"));sup("s10").status="ordered";feed("arribo","PO ARB-2026-1041 → 深圳 Lumi：500 个（约 41.7 打）@ ¥1380/打 含空运，10/30 到洛杉矶。","s10")});
+  sched(t+1300,()=>{S.pos.push(mk(42,"s11",500,15,"truck","Transportes del Norte","MX-BOL-220931"));sup("s11").status="ordered";feed("arribo","OC ARB-2026-1042 → Fábrica Norte: 500 piezas a $15 USD, entrega Oct 30.","s11")});
+  sched(t+1900,()=>{S.pos.push(mk(43,"s2",250,15,"air rush","China Eastern Cargo","781-55120934"));sup("s2").status="ordered";feed("arribo","PO ARB-2026-1043 → 义乌宏盛：250 个，加急空运，10/30 到洛杉矶。","s2")});
+  // days
+  t+=2600;
+  [1,2,3,4].forEach((d,i)=>sched(t+i*1600,()=>{S.day=d;
+    if(d===3){S.pos.forEach(p=>p.status="arrived");feed("system","Oct 30: 1,250 pcs received at LA warehouse (3 shipments).")}
+    if(d===2) feed("system","Oct 29: in transit · 3 shipments tracking on time.");
+  }));
+  t+=4*1600+800;
+  sched(t,()=>{S.day=5;S.phase="settled";
+    const cogs=Math.round(S.pos.reduce((a,p)=>a+p.qty*p.unitUsd,0)),arr=S.pos.reduce((a,p)=>a+p.qty,0),sold=Math.min(arr,1200);
+    S.result={arribo:{arrived:arr,sold,revenue:sold*39,cogs,lostDepositUsd:0,zombies:arr-sold,profitUsd:sold*39-cogs,why:"Diversified across 3 verified suppliers, air-freighted the late one, never paid a ghost."},
+      human:{arrived:400,sold:400,revenue:15600,cogs:23100,lostDepositUsd:4050,zombies:1500,profitUsd:-11550,why:"Paid GhostlyGoods a $4,050 deposit, booked Shantou by sea (arrives Nov 15), panic-bought 400 from Dallas on Oct 30."}};
+    feed("system","Midnight Oct 31 · season settled.")});
+}
+
+/* ---------------- wiring ---------------- */
+$("startBtn").onclick=()=>{ if($("mode").value==="replay") startReplay(); else sendCmd({type:"start",spec:currentSpec()}) };
+$("resetBtn").onclick=()=>{ clearReplay(); settleShown=false; $("settle").style.display="none";
+  if($("mode").value==="replay"){S=emptyState();render()} else sendCmd({type:"reset"}) };
+$("mode").onchange=()=>{ clearReplay(); if(es){es.close();es=null}
+  if($("mode").value==="live") connectLive(); else {S=emptyState();render()} };
+["spQty","spMax"].forEach(id=>$(id).addEventListener("change",()=>{ if($("mode").value==="live"&&S&&S.phase!=="pick") sendCmd({type:"spec",spec:currentSpec()}) }));
+
+(async()=>{
+  CFG=await (await fetch("/config.json")).json();
+  S=emptyState(); render();
+  const q=new URLSearchParams(location.search);
+  if(q.get("mode")==="replay"||location.protocol==="file:"){$("mode").value="replay"} else connectLive();
+})();
+</script>
+<script src="/voice.js"></script>
+</body>
+</html>

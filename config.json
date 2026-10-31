@@ -1,0 +1,668 @@
+{
+  "game": {
+    "season": "Halloween 2026",
+    "startDate": "2026-10-27",
+    "deadlineDayIndex": 4,
+    "msPerDay": 15000,
+    "retailPriceUsd": 39,
+    "actualDemand": 1200,
+    "forecastRange": [
+      800,
+      1600
+    ],
+    "fxRmbPerUsd": 7.2,
+    "defaultAirFreightUsdPerPc": 5,
+    "maxShareOfTarget": 0.4,
+    "minScoreToBuy": 70,
+    "verifyIf": {
+      "scoreBelowOrMissing": 60,
+      "priceBelowAvgPct": 40
+    },
+    "poPrefix": "ARB-2026-10",
+    "searchTrend7d": [
+      12,
+      15,
+      14,
+      18,
+      22,
+      85,
+      100
+    ],
+    "humanWaitMs": 90000
+  },
+  "spec": {
+    "item": "Glowing Pumpkin Head",
+    "variant": "Adult",
+    "sku": "GPH-01",
+    "quantity": 1250,
+    "deliverTo": "Los Angeles warehouse",
+    "deliverByDayIndex": 4,
+    "deliverByLabel": "Oct 31",
+    "targetLandedUsdPerPc": 18,
+    "maxDepositPct": 30,
+    "mustHave": [
+      {
+        "id": "battery_aa",
+        "label": "LED uses AA batteries (no coin cells)"
+      },
+      {
+        "id": "flame_report",
+        "label": "Flame-retardant fabric with test report"
+      }
+    ]
+  },
+  "suppliers": [
+    {
+      "id": "s1",
+      "name": "Lone Star Party Wholesale",
+      "city": "Dallas, TX, USA",
+      "channel": "email",
+      "lang": "en",
+      "llm": false,
+      "opening": "Subject: RE: {item} availability. Hi, we have 400 units in our Dallas DC at $24/unit, ships today, arrives tomorrow. Price is firm and I can't hold stock past 5pm. – Mike, Lone Star Party Wholesale",
+      "truth": {
+        "qty": 400,
+        "unitUsd": 24,
+        "freightIncluded": true,
+        "depositPct": 0,
+        "inStock": true,
+        "secret": "Raised price for the viral item (normally $18). Won't negotiate. The 5pm deadline is real."
+      },
+      "shippingOptions": [
+        {
+          "mode": "ground",
+          "freightUsdPerPc": 0,
+          "transitDays": 1
+        }
+      ],
+      "compliance": {
+        "battery_aa": true,
+        "flame_report": true
+      },
+      "carrier": "UPS Freight",
+      "trackingFormat": "1Z-UPSF-######",
+      "history": [
+        {
+          "year": 2023,
+          "note": "On time; normal $19, peak $25"
+        },
+        {
+          "year": 2024,
+          "note": "On time; $18 → $23"
+        },
+        {
+          "year": 2025,
+          "note": "On time; $18 → $24"
+        }
+      ],
+      "score": 92
+    },
+    {
+      "id": "s2",
+      "name": "Yiwu Hongsheng Festive Crafts",
+      "city": "Yiwu, Zhejiang, China",
+      "channel": "wechat",
+      "lang": "zh",
+      "llm": true,
+      "opening": "老板好！{item}我们有现成模具，最多能做 1500 个，单价 ¥65 FOB 义乌，空运另算约 ¥36/个，交期 5 天，需要先付 30% 定金哈～",
+      "truth": {
+        "qty": 1500,
+        "unitRmb": 65,
+        "incoterm": "FOB",
+        "depositPct": 30,
+        "inStock": false,
+        "secret": "Quoted 5 days but can deliver by air in 3 days with a rush fee of ¥7/pc. Only reveals this when asked about speed, rush, or their past lead times. Habitually replies '在做了'."
+      },
+      "shippingOptions": [
+        {
+          "mode": "air",
+          "freightRmbPerPc": 36,
+          "transitDays": 5,
+          "label": "standard air (as quoted)"
+        },
+        {
+          "mode": "air_rush",
+          "freightRmbPerPc": 43,
+          "transitDays": 3,
+          "label": "rush air (+¥7/pc, only if asked)"
+        },
+        {
+          "mode": "sea",
+          "freightUsdPerPc": 0.5,
+          "transitDays": 18,
+          "label": "sea"
+        }
+      ],
+      "compliance": {
+        "battery_aa": true,
+        "flame_report": true
+      },
+      "carrier": "China Eastern Cargo",
+      "trackingFormat": "781-########",
+      "history": [
+        {
+          "year": 2023,
+          "note": "Quoted 7 days, delivered in 5"
+        },
+        {
+          "year": 2024,
+          "note": "Quoted 6 days, delivered in 4"
+        },
+        {
+          "year": 2025,
+          "note": "Quoted 5 days, delivered in 6 (1 day late)"
+        }
+      ],
+      "score": 78
+    },
+    {
+      "id": "s3",
+      "name": "BooSupply",
+      "city": "Unknown (claims Los Angeles)",
+      "channel": "email",
+      "lang": "en",
+      "llm": true,
+      "ghost": true,
+      "opening": "URGENT – 2,000 units of {item} IN STOCK at our SpookyLogistics warehouse, $11/unit, ships tomorrow! 30% prepayment locks your order. Today only. – BooSupply Sales",
+      "truth": {
+        "qty": 0,
+        "claimedQty": 2000,
+        "unitUsd": 11,
+        "freightIncluded": true,
+        "depositPct": 30,
+        "inStock": false,
+        "claimedWarehouse": "SpookyLogistics",
+        "secret": "Zero inventory; only wants the deposit. Deflects every request for proof. Never confesses."
+      },
+      "shippingOptions": [
+        {
+          "mode": "ground",
+          "freightUsdPerPc": 0,
+          "transitDays": 1,
+          "label": "claimed"
+        }
+      ],
+      "compliance": {
+        "battery_aa": true,
+        "flame_report": true
+      },
+      "carrier": "n/a",
+      "trackingFormat": "n/a",
+      "history": [],
+      "score": null,
+      "registeredWeeksAgo": 3
+    },
+    {
+      "id": "s4",
+      "name": "Pacific Costume Supply",
+      "city": "Los Angeles, CA, USA",
+      "channel": "excel",
+      "lang": "en",
+      "llm": false,
+      "opening": "SKU: GPH-01 · Desc: {item} · Qty Avail: 300 · Unit Price: 26.00 USD · Lead Time: 2 days (LA) · Note: LED uses CR2032 coin cells.",
+      "truth": {
+        "qty": 300,
+        "unitUsd": 26,
+        "freightIncluded": true,
+        "depositPct": 0,
+        "inStock": true,
+        "secret": "Real stock, but coin-cell version: fails the AA-battery requirement."
+      },
+      "shippingOptions": [
+        {
+          "mode": "ground",
+          "freightUsdPerPc": 0,
+          "transitDays": 2
+        }
+      ],
+      "compliance": {
+        "battery_aa": false,
+        "flame_report": true
+      },
+      "carrier": "Local LTL",
+      "trackingFormat": "PCS-LTL-#####",
+      "history": [
+        {
+          "year": 2024,
+          "note": "On time"
+        },
+        {
+          "year": 2025,
+          "note": "On time"
+        }
+      ],
+      "score": 88
+    },
+    {
+      "id": "s5",
+      "name": "Shantou Chenghai Toys",
+      "city": "Shantou, Guangdong, China",
+      "channel": "voice",
+      "lang": "zh",
+      "llm": false,
+      "opening": "喂你好，我是汕头那个工厂啊，{item}我们能做两千个，出厂价五十八块，就是 EXW 哈，走海运的话大概……十一月中能到你那边。",
+      "truth": {
+        "qty": 2000,
+        "unitRmb": 58,
+        "incoterm": "EXW",
+        "depositPct": 30,
+        "inStock": false,
+        "secret": "Cheapest, but sea only: arrives mid-November, after Halloween."
+      },
+      "shippingOptions": [
+        {
+          "mode": "sea",
+          "freightUsdPerPc": 1,
+          "transitDays": 19
+        }
+      ],
+      "compliance": {
+        "battery_aa": true,
+        "flame_report": true
+      },
+      "carrier": "COSCO (sea)",
+      "trackingFormat": "COSU########",
+      "history": [
+        {
+          "year": 2023,
+          "note": "On time, sea 28 days"
+        },
+        {
+          "year": 2024,
+          "note": "On time, sea 26 days"
+        },
+        {
+          "year": 2025,
+          "note": "On time, sea 30 days"
+        }
+      ],
+      "score": 81
+    },
+    {
+      "id": "s6",
+      "name": "Ningbo Yongjia Apparel",
+      "city": "Ningbo, Zhejiang, China",
+      "channel": "email_pdf",
+      "lang": "zh",
+      "llm": true,
+      "opening": "您好，附件是报价单。【PDF】品名：{item} / 数量：800 / 单价：USD 13.00 DDP 洛杉矶 / 交期：4 天 / 付款：50% 预付",
+      "truth": {
+        "qty": 500,
+        "claimedQty": 800,
+        "unitUsd": 13,
+        "incoterm": "DDP",
+        "depositPct": 50,
+        "inStock": false,
+        "secret": "Real capacity is only 500; the rest slips to next week. Admits this only when asked about capacity or past short shipments."
+      },
+      "shippingOptions": [
+        {
+          "mode": "air",
+          "freightUsdPerPc": 0,
+          "transitDays": 4,
+          "label": "DDP, freight included"
+        }
+      ],
+      "compliance": {
+        "battery_aa": true,
+        "flame_report": true
+      },
+      "carrier": "DHL Global Forwarding",
+      "trackingFormat": "DGF-########",
+      "history": [
+        {
+          "year": 2023,
+          "note": "Short-shipped 12%"
+        },
+        {
+          "year": 2024,
+          "note": "Full and on time"
+        },
+        {
+          "year": 2025,
+          "note": "Short-shipped 18%"
+        }
+      ],
+      "score": 64
+    },
+    {
+      "id": "s7",
+      "name": "SpookyFinds (Amazon reseller)",
+      "city": "Phoenix, AZ, USA",
+      "channel": "chat",
+      "lang": "en",
+      "llm": false,
+      "opening": "hey saw ur post, I got 150 of the {item}, $35 each, can ship tmrw. no paperwork tho",
+      "truth": {
+        "qty": 150,
+        "unitUsd": 35,
+        "freightIncluded": true,
+        "depositPct": 0,
+        "inStock": true,
+        "secret": "Real but tiny, expensive, and no flame-retardant test report."
+      },
+      "shippingOptions": [
+        {
+          "mode": "ground",
+          "freightUsdPerPc": 0,
+          "transitDays": 1
+        }
+      ],
+      "compliance": {
+        "battery_aa": true,
+        "flame_report": false
+      },
+      "carrier": "USPS",
+      "trackingFormat": "9400##################",
+      "history": [
+        {
+          "year": 2025,
+          "note": "On time"
+        }
+      ],
+      "score": 70
+    },
+    {
+      "id": "s8",
+      "name": "Haiphong Garment Co.",
+      "city": "Hai Phong, Vietnam",
+      "channel": "pdf",
+      "lang": "en",
+      "llm": false,
+      "opening": "QUOTATION No. VN-2210 – {item}, MOQ 1,000 pcs, USD 10.00/pc FOB Hai Phong. Production time: 3 days.",
+      "truth": {
+        "qty": 1000,
+        "unitUsd": 10,
+        "incoterm": "FOB",
+        "depositPct": 30,
+        "inStock": false,
+        "secret": "Quote only states production time; shipping is sea (~18 days), so it cannot arrive before Halloween."
+      },
+      "shippingOptions": [
+        {
+          "mode": "sea",
+          "freightUsdPerPc": 1,
+          "transitDays": 18
+        }
+      ],
+      "compliance": {
+        "battery_aa": true,
+        "flame_report": true
+      },
+      "carrier": "Evergreen (sea)",
+      "trackingFormat": "EGLV########",
+      "history": [
+        {
+          "year": 2025,
+          "note": "On time, sea 18 days"
+        }
+      ],
+      "score": 75
+    },
+    {
+      "id": "s9",
+      "name": "GhostlyGoods",
+      "city": "Unknown (claims New Jersey)",
+      "channel": "email",
+      "lang": "en",
+      "llm": true,
+      "ghost": true,
+      "opening": "Hi buyer!! GhostlyGoods has 3,000 {item} ready in our New Jersey warehouse (photo attached). $9/unit, 30% deposit, ships same day. Don't miss out!!",
+      "truth": {
+        "qty": 0,
+        "claimedQty": 3000,
+        "unitUsd": 9,
+        "freightIncluded": true,
+        "depositPct": 30,
+        "inStock": false,
+        "claimedWarehouse": "New Jersey warehouse (handled by SpookyLogistics)",
+        "secret": "Zero inventory; the photo is fake. Deflects every request for proof. Never confesses."
+      },
+      "shippingOptions": [
+        {
+          "mode": "ground",
+          "freightUsdPerPc": 0,
+          "transitDays": 2,
+          "label": "claimed"
+        }
+      ],
+      "compliance": {
+        "battery_aa": true,
+        "flame_report": true
+      },
+      "carrier": "n/a",
+      "trackingFormat": "n/a",
+      "history": [],
+      "score": null,
+      "registeredWeeksAgo": 2
+    },
+    {
+      "id": "s10",
+      "name": "Shenzhen Lumi Party Co.",
+      "city": "Shenzhen, Guangdong, China",
+      "channel": "wechat",
+      "lang": "zh",
+      "llm": true,
+      "opening": "{item}有货哦，100 打，¥1380 一打含空运，3 天到美西，要的话今天确认～",
+      "truth": {
+        "qty": 1200,
+        "unitRmbPerDozen": 1380,
+        "freightIncluded": true,
+        "depositPct": 30,
+        "inStock": true,
+        "secret": "Quotes in dozens: 100 dozen = 1,200 pcs, about $16/pc landed."
+      },
+      "shippingOptions": [
+        {
+          "mode": "air",
+          "freightUsdPerPc": 0,
+          "transitDays": 3,
+          "label": "air, freight included"
+        }
+      ],
+      "compliance": {
+        "battery_aa": true,
+        "flame_report": true
+      },
+      "carrier": "Cathay Cargo",
+      "trackingFormat": "160-########",
+      "history": [
+        {
+          "year": 2023,
+          "note": "On time, quoted in dozens"
+        },
+        {
+          "year": 2024,
+          "note": "On time"
+        },
+        {
+          "year": 2025,
+          "note": "On time"
+        }
+      ],
+      "score": 90
+    },
+    {
+      "id": "s11",
+      "name": "Fábrica Norte",
+      "city": "Monterrey, Mexico",
+      "channel": "email",
+      "lang": "es",
+      "llm": true,
+      "opening": "Hola, podemos entregar 600 piezas de {item} a $15 USD c/u, envío por camión desde Monterrey, llegan en 3 días. Saludos, Fábrica Norte",
+      "truth": {
+        "qty": 600,
+        "unitUsd": 15,
+        "freightIncluded": true,
+        "depositPct": 30,
+        "inStock": false,
+        "secret": "Real. When the PO arrives, tries once to raise to $16; accepts $15 when held to the quote."
+      },
+      "shippingOptions": [
+        {
+          "mode": "truck",
+          "freightUsdPerPc": 0,
+          "transitDays": 3
+        }
+      ],
+      "compliance": {
+        "battery_aa": true,
+        "flame_report": true
+      },
+      "carrier": "Transportes del Norte",
+      "trackingFormat": "MX-BOL-######",
+      "history": [
+        {
+          "year": 2024,
+          "note": "On time"
+        },
+        {
+          "year": 2025,
+          "note": "1 day late"
+        }
+      ],
+      "score": 80
+    },
+    {
+      "id": "s12",
+      "name": "Spooky Co",
+      "city": "Chicago, IL, USA",
+      "channel": "email",
+      "lang": "en",
+      "llm": false,
+      "opening": "Thank you for contacting Spooky Co. {item} is SOLD OUT for the 2026 season.",
+      "truth": {
+        "qty": 0,
+        "soldOut": true,
+        "secret": "Genuinely sold out. Distractor."
+      },
+      "shippingOptions": [],
+      "compliance": {
+        "battery_aa": true,
+        "flame_report": true
+      },
+      "carrier": "n/a",
+      "trackingFormat": "n/a",
+      "history": [
+        {
+          "year": 2023,
+          "note": "On time"
+        },
+        {
+          "year": 2024,
+          "note": "On time"
+        },
+        {
+          "year": 2025,
+          "note": "On time"
+        }
+      ],
+      "score": 85
+    },
+    {
+      "id": "s13",
+      "name": "Live supplier (Slack)",
+      "city": "Slack · real human",
+      "channel": "slack",
+      "lang": "any",
+      "llm": false,
+      "human": true,
+      "opening": "",
+      "truth": {},
+      "shippingOptions": [],
+      "compliance": {
+        "battery_aa": true,
+        "flame_report": true
+      },
+      "carrier": "Supplier-arranged",
+      "trackingFormat": "SLK-######",
+      "history": [],
+      "score": null
+    }
+  ],
+  "threePL": {
+    "id": "3pl",
+    "name": "SpookyLogistics",
+    "rules": {
+      "ghostSuppliers": [
+        "s3",
+        "s9"
+      ],
+      "ghostReply": "No inventory on record for this account.",
+      "otherReply": "Not a customer of this facility."
+    }
+  },
+  "expectedArribo": {
+    "orders": [
+      {
+        "supplier": "s10",
+        "qty": 500,
+        "unitUsd": 16,
+        "mode": "air"
+      },
+      {
+        "supplier": "s11",
+        "qty": 500,
+        "unitUsd": 15,
+        "mode": "truck"
+      },
+      {
+        "supplier": "s2",
+        "qty": 250,
+        "unitUsd": 15,
+        "mode": "air_rush"
+      }
+    ],
+    "result": {
+      "arrived": 1250,
+      "sold": 1200,
+      "zombies": 50,
+      "lostDepositUsd": 0,
+      "profitUsd": 27550
+    }
+  },
+  "humanBaseline": {
+    "label": "Gut-feel buyer",
+    "readMessages": [
+      "s9",
+      "s5",
+      "s1"
+    ],
+    "rules": [
+      "Pick the cheapest quote",
+      "Trust what suppliers say",
+      "Use the first quoted lead time"
+    ],
+    "orders": [
+      {
+        "supplier": "s9",
+        "qty": 1500,
+        "unitUsd": 9,
+        "depositUsd": 4050,
+        "arrived": 0,
+        "note": "ghost, deposit lost"
+      },
+      {
+        "supplier": "s5",
+        "qty": 1500,
+        "unitUsd": 9,
+        "arrived": 0,
+        "note": "sea, arrives mid-November"
+      },
+      {
+        "supplier": "s1",
+        "qty": 400,
+        "unitUsd": 24,
+        "arrived": 400,
+        "note": "panic buy on Oct 30"
+      }
+    ],
+    "result": {
+      "arrived": 400,
+      "sold": 400,
+      "zombies": 1500,
+      "lostDepositUsd": 4050,
+      "profitUsd": -11550
+    }
+  }
+}

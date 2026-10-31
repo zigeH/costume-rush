@@ -1,0 +1,762 @@
+{
+ "id": "labubu",
+ "scenario": {
+  "id": "labubu",
+  "emoji": "🧸",
+  "title": "Labubu blind boxes",
+  "qty": 2400,
+  "rfq": "RFQ-2026-1031",
+  "who": "8 Bay Area toy stores",
+  "budget": 16,
+  "retail": 27.99,
+  "mustHave": [
+   "authentic Pop Mart only"
+  ],
+  "deadlineLabel": "Nov 20",
+  "daysLeft": 20,
+  "why": "Every drop sells out in minutes. Fakes (\"Lafufu\") flood wholesale listings, and customs seizes counterfeits at the border.",
+  "channel": "#labubu-rush"
+ },
+ "game": {
+  "season": "Black Friday 2026",
+  "startDate": "2026-10-31",
+  "deliverByDayIndex": 20,
+  "deadlineLabel": "Nov 20",
+  "settleLabel": "Nov 27",
+  "daysLeft": 20,
+  "msPerDay": 400,
+  "retailPriceUsd": 27.99,
+  "actualDemand": 2350,
+  "fxRmbPerUsd": 6.69,
+  "fxFallback": {
+   "CNY": 6.69,
+   "JPY": 148.75,
+   "KRW": 1385,
+   "MXN": 18.6,
+   "CAD": 1.39
+  },
+  "maxShareOfTarget": 0.4,
+  "poPrefix": "ARB-2026-20",
+  "poStart": 41,
+  "humanWaitMs": 180000,
+  "authorizedFloorUsd": 12.5
+ },
+ "spec": {
+  "item": "Labubu blind boxes (Pop Mart · The Monsters)",
+  "variant": "The Monsters series",
+  "sku": "POPMART-LBB-MONSTERS",
+  "quantity": 2400,
+  "deliverTo": "8 Bay Area toy stores",
+  "deliverByDayIndex": 20,
+  "deliverByLabel": "Nov 20",
+  "targetLandedUsdPerPc": 16,
+  "maxDepositPct": 30,
+  "retailPriceUsd": 27.99,
+  "mustHave": [
+   {
+    "id": "authentic",
+    "label": "Authentic Pop Mart only (authorized channel)"
+   }
+  ]
+ },
+ "agents": [
+  {
+   "id": "3pl",
+   "name": "Warehouse (3PL)",
+   "role": "stock check"
+  },
+  {
+   "id": "reg",
+   "name": "Registry agent",
+   "role": "domain age (RDAP) + authorized list"
+  },
+  {
+   "id": "img",
+   "name": "Photo check agent",
+   "role": "vision · QR · duplicate photos"
+  },
+  {
+   "id": "pay",
+   "name": "Payments agent",
+   "role": "invoice payee vs supplier name"
+  },
+  {
+   "id": "geo",
+   "name": "Location agent",
+   "role": "geocode claimed address"
+  }
+ ],
+ "suppliers": [
+  {
+   "id": "s1",
+   "name": "Pacific Toy Distribution",
+   "city": "Los Angeles, US",
+   "channel": "email",
+   "lang": "en",
+   "llm": false,
+   "kind": "authorized",
+   "score": 95,
+   "opening": "Authorized Pop Mart distributor (US). 1,200 boxes of The Monsters blind boxes available, $15.90/box delivered to your DC, ships Nov 8, arrives Nov 10. 30% deposit, balance net 30.",
+   "truth": {
+    "qty": 1200,
+    "price": {
+     "amount": 15.9,
+     "currency": "USD"
+    },
+    "incoterm": "DDP",
+    "depositPct": 30,
+    "authorized": true
+   },
+   "shippingOptions": [
+    {
+     "mode": "truck",
+     "label": "ground (included)",
+     "freight": {
+      "amount": 0,
+      "currency": "USD"
+     },
+     "arriveDay": 10,
+     "arriveLabel": "Nov 10"
+    }
+   ],
+   "claims": {
+    "domain": "pacifictoydist.com",
+    "domainAgeDays": 2400,
+    "address": "Los Angeles, CA",
+    "payee": "Pacific Toy Distribution LLC",
+    "teeth": 9,
+    "footStamp": true,
+    "qrDomain": "popmart.com",
+    "photoHash": "a1",
+    "warehouse": "in stock (3PL verified)",
+    "deliveries": 6
+   },
+   "carrier": "FedEx Freight",
+   "trackingFormat": "FXF-#########",
+   "history": [
+    {
+     "year": 2025,
+     "note": "6 deliveries, all on time"
+    }
+   ]
+  },
+  {
+   "id": "s2",
+   "name": "Shenzhen Paopao Wholesale",
+   "city": "Shenzhen, CN",
+   "channel": "wechat",
+   "lang": "zh",
+   "llm": true,
+   "kind": "authorized",
+   "score": 90,
+   "opening": "老板好，我们是泡泡玛特授权批发（深圳泡泡批发）。The Monsters 盲盒现货 1,500 盒，¥93/盒 FOB 深圳。空运每盒加 ¥6，11/8 到洛杉矶；海运每盒加 ¥2，11/25 到。定金 30%。",
+   "truth": {
+    "qty": 1500,
+    "price": {
+     "amount": 93,
+     "currency": "CNY"
+    },
+    "incoterm": "FOB",
+    "depositPct": 30,
+    "authorized": true
+   },
+   "shippingOptions": [
+    {
+     "mode": "air",
+     "label": "air (+¥6/box)",
+     "freight": {
+      "amount": 6,
+      "currency": "CNY"
+     },
+     "arriveDay": 8,
+     "arriveLabel": "Nov 8"
+    },
+    {
+     "mode": "sea",
+     "label": "sea (+¥2/box)",
+     "freight": {
+      "amount": 2,
+      "currency": "CNY"
+     },
+     "arriveDay": 25,
+     "arriveLabel": "Nov 25"
+    }
+   ],
+   "claims": {
+    "domain": "paopao-wholesale.cn",
+    "domainAgeDays": 2900,
+    "address": "Nanshan, Shenzhen",
+    "payee": "深圳泡泡批发有限公司",
+    "teeth": 9,
+    "footStamp": true,
+    "qrDomain": "popmart.com",
+    "codeShown": true,
+    "photoHash": "b2",
+    "warehouse": "in stock (bonded warehouse)",
+    "deliveries": 2
+   },
+   "carrier": "China Southern Cargo",
+   "trackingFormat": "784-########",
+   "history": [
+    {
+     "year": 2024,
+     "note": "on time"
+    },
+    {
+     "year": 2025,
+     "note": "on time"
+    }
+   ]
+  },
+  {
+   "id": "s3",
+   "name": "LabuLand Wholesale",
+   "city": "\"Los Angeles\"",
+   "channel": "email",
+   "lang": "en",
+   "llm": true,
+   "kind": "ghost",
+   "score": null,
+   "opening": "BIG SALE!! 5,000 authentic Labubu blind boxes IN STOCK at our LA warehouse, $9/box!! 30% deposit today locks your order. Pop Mart surplus, 100% real.",
+   "truth": {
+    "qty": 5000,
+    "price": {
+     "amount": 9,
+     "currency": "USD"
+    },
+    "incoterm": "DDP",
+    "depositPct": 30,
+    "authorized": false,
+    "inStock": false
+   },
+   "shippingOptions": [
+    {
+     "mode": "truck",
+     "label": "ground",
+     "freight": {
+      "amount": 0,
+      "currency": "USD"
+     },
+     "arriveDay": 4,
+     "arriveLabel": "Nov 4"
+    }
+   ],
+   "claims": {
+    "domain": "labuland-wholesale.com",
+    "domainAgeDays": 9,
+    "address": "Los Angeles, CA",
+    "payee": "personal account · Hong Kong (W. Chan)",
+    "teeth": 10,
+    "footStamp": false,
+    "qrDomain": "popmart-labubu-sale.shop",
+    "codeShown": false,
+    "photoHash": "ff13",
+    "warehouse": "no inventory on record",
+    "deliveries": 0,
+    "photoDesc": "glossy stock photo of pink boxes"
+   },
+   "carrier": "—",
+   "trackingFormat": "LL-######",
+   "history": []
+  },
+  {
+   "id": "s4",
+   "name": "Yiwu Hengfa Factory",
+   "city": "Yiwu, CN",
+   "channel": "wechat",
+   "lang": "zh",
+   "llm": false,
+   "kind": "counterfeit",
+   "score": null,
+   "opening": "工厂直供 Labubu，跟正品一模一样，¥28/盒，10 万盒都能做，不需要授权书也能发货。",
+   "truth": {
+    "qty": 100000,
+    "price": {
+     "amount": 28,
+     "currency": "CNY"
+    },
+    "incoterm": "FOB",
+    "depositPct": 50,
+    "authorized": false
+   },
+   "shippingOptions": [
+    {
+     "mode": "air",
+     "label": "air",
+     "freight": {
+      "amount": 0,
+      "currency": "CNY"
+     },
+     "arriveDay": 9,
+     "arriveLabel": "Nov 9"
+    }
+   ],
+   "claims": {
+    "domain": "",
+    "address": "Yiwu, Zhejiang",
+    "payee": "义乌恒发工艺品厂"
+   },
+   "screenNote": "unlicensed copies · customs seizes counterfeits",
+   "carrier": "—",
+   "trackingFormat": "YW-######",
+   "history": []
+  },
+  {
+   "id": "s5",
+   "name": "Seoul Resell Co.",
+   "city": "Seoul, KR",
+   "channel": "kakao",
+   "lang": "ko",
+   "llm": false,
+   "kind": "reseller",
+   "score": 60,
+   "opening": "라부부 정품 300박스 있습니다. 박스당 $31, 바로 발송 가능합니다.",
+   "truth": {
+    "qty": 300,
+    "price": {
+     "amount": 31,
+     "currency": "USD"
+    },
+    "incoterm": "DDP",
+    "depositPct": 100,
+    "authorized": false
+   },
+   "shippingOptions": [
+    {
+     "mode": "air",
+     "label": "EMS",
+     "freight": {
+      "amount": 0,
+      "currency": "USD"
+     },
+     "arriveDay": 7,
+     "arriveLabel": "Nov 7"
+    }
+   ],
+   "claims": {},
+   "screenNote": "over budget: $31 > $16",
+   "carrier": "EMS",
+   "trackingFormat": "EE#########KR",
+   "history": []
+  },
+  {
+   "id": "s6",
+   "name": "ToyFlip (Amazon seller)",
+   "city": "Phoenix, US",
+   "channel": "amazon",
+   "lang": "en",
+   "llm": false,
+   "kind": "reseller",
+   "score": 55,
+   "opening": "got 200 sealed boxes, $29 each, can ship tmrw",
+   "truth": {
+    "qty": 200,
+    "price": {
+     "amount": 29,
+     "currency": "USD"
+    },
+    "incoterm": "DDP",
+    "depositPct": 100,
+    "authorized": false
+   },
+   "shippingOptions": [
+    {
+     "mode": "ground",
+     "label": "UPS ground",
+     "freight": {
+      "amount": 0,
+      "currency": "USD"
+     },
+     "arriveDay": 4,
+     "arriveLabel": "Nov 4"
+    }
+   ],
+   "claims": {},
+   "screenNote": "over budget · only 200 boxes",
+   "carrier": "UPS",
+   "trackingFormat": "1Z##########",
+   "history": []
+  },
+  {
+   "id": "s7",
+   "name": "Saigon Toy Export",
+   "city": "Ho Chi Minh City, VN",
+   "channel": "pdf",
+   "lang": "en",
+   "llm": false,
+   "kind": "late",
+   "score": 50,
+   "opening": "QUOTATION VN-1187 · Labubu blind box · 2,000 pcs · USD 12.00 FOB Ho Chi Minh City · sea freight USD 0.50/pc · ETA LA Dec 3",
+   "truth": {
+    "qty": 2000,
+    "price": {
+     "amount": 12,
+     "currency": "USD"
+    },
+    "incoterm": "FOB",
+    "depositPct": 30,
+    "authorized": false
+   },
+   "shippingOptions": [
+    {
+     "mode": "sea",
+     "label": "sea",
+     "freight": {
+      "amount": 0.5,
+      "currency": "USD"
+     },
+     "arriveDay": 33,
+     "arriveLabel": "Dec 3"
+    }
+   ],
+   "claims": {},
+   "screenNote": "sea only · lands Dec 3 · not authorized",
+   "carrier": "Maersk",
+   "trackingFormat": "MSKU#######",
+   "history": []
+  },
+  {
+   "id": "s8",
+   "name": "Distribuidora Juguetes MX",
+   "city": "Monterrey, MX",
+   "channel": "email",
+   "lang": "es",
+   "llm": false,
+   "kind": "authorized",
+   "score": 80,
+   "opening": "Hola, somos distribuidor autorizado de Pop Mart en México (Distribuidora Juguetes MX). Podemos enviar 600 cajas de The Monsters a $15.40 USD, incluye camión, entrega 12 de noviembre. Anticipo 30%.",
+   "truth": {
+    "qty": 600,
+    "price": {
+     "amount": 15.4,
+     "currency": "USD"
+    },
+    "incoterm": "DAP",
+    "depositPct": 30,
+    "authorized": true
+   },
+   "shippingOptions": [
+    {
+     "mode": "truck",
+     "label": "truck (included)",
+     "freight": {
+      "amount": 0,
+      "currency": "USD"
+     },
+     "arriveDay": 12,
+     "arriveLabel": "Nov 12"
+    }
+   ],
+   "claims": {
+    "domain": "juguetesmx.com.mx",
+    "domainAgeDays": 3100,
+    "address": "Monterrey, NL",
+    "payee": "Distribuidora Juguetes MX SA de CV",
+    "teeth": 9,
+    "footStamp": true,
+    "qrDomain": "popmart.com",
+    "photoHash": "c3",
+    "warehouse": "in stock (3PL verified)",
+    "deliveries": 1
+   },
+   "carrier": "Estafeta Freight",
+   "trackingFormat": "EST-########",
+   "history": [
+    {
+     "year": 2025,
+     "note": "1 delivery, on time"
+    }
+   ]
+  },
+  {
+   "id": "s9",
+   "name": "GhostlyToys",
+   "city": "\"New Jersey\"",
+   "channel": "email",
+   "lang": "en",
+   "llm": true,
+   "kind": "ghost",
+   "score": null,
+   "opening": "Hi buyer!! 3,000 Labubu boxes ready in NJ, $8.50 each, 30% deposit and they're yours!!",
+   "truth": {
+    "qty": 3000,
+    "price": {
+     "amount": 8.5,
+     "currency": "USD"
+    },
+    "incoterm": "DDP",
+    "depositPct": 30,
+    "authorized": false,
+    "inStock": false
+   },
+   "shippingOptions": [
+    {
+     "mode": "truck",
+     "label": "ground",
+     "freight": {
+      "amount": 0,
+      "currency": "USD"
+     },
+     "arriveDay": 5,
+     "arriveLabel": "Nov 5"
+    }
+   ],
+   "claims": {
+    "domain": "ghostlytoys-store.com",
+    "domainAgeDays": 6,
+    "address": "Newark, NJ",
+    "payee": "personal account · Hong Kong (W. Chan)",
+    "teeth": 10,
+    "footStamp": false,
+    "qrDomain": "popmart-labubu-sale.shop",
+    "codeShown": false,
+    "photoHash": "ff13",
+    "warehouse": "no inventory on record",
+    "deliveries": 0,
+    "photoDesc": "glossy stock photo of pink boxes (same image as LabuLand)"
+   },
+   "carrier": "—",
+   "trackingFormat": "GT-######",
+   "history": []
+  },
+  {
+   "id": "s10",
+   "name": "Tokyo Toys",
+   "city": "Tokyo, JP",
+   "channel": "email",
+   "lang": "ja",
+   "llm": false,
+   "kind": "reseller",
+   "score": 70,
+   "opening": "ラブブ正規品、300箱ございます。1箱 ¥4,180（送料込み）、11月15日着。",
+   "truth": {
+    "qty": 300,
+    "price": {
+     "amount": 4180,
+     "currency": "JPY"
+    },
+    "incoterm": "DDP",
+    "depositPct": 100,
+    "authorized": false
+   },
+   "shippingOptions": [
+    {
+     "mode": "air",
+     "label": "air (included)",
+     "freight": {
+      "amount": 0,
+      "currency": "JPY"
+     },
+     "arriveDay": 15,
+     "arriveLabel": "Nov 15"
+    }
+   ],
+   "claims": {},
+   "screenNote": "over budget · retail-priced resale",
+   "carrier": "Japan Post EMS",
+   "trackingFormat": "EJ#########JP",
+   "history": []
+  },
+  {
+   "id": "s11",
+   "name": "Toronto Collectibles Supply",
+   "city": "Toronto, CA",
+   "channel": "email",
+   "lang": "en",
+   "llm": false,
+   "kind": "authorized",
+   "score": 85,
+   "opening": "Authorized Pop Mart distributor (Canada). 500 boxes at $17.20 landed, arrives Nov 14.",
+   "truth": {
+    "qty": 500,
+    "price": {
+     "amount": 17.2,
+     "currency": "USD"
+    },
+    "incoterm": "DDP",
+    "depositPct": 30,
+    "authorized": true
+   },
+   "shippingOptions": [
+    {
+     "mode": "truck",
+     "label": "truck (included)",
+     "freight": {
+      "amount": 0,
+      "currency": "USD"
+     },
+     "arriveDay": 14,
+     "arriveLabel": "Nov 14"
+    }
+   ],
+   "claims": {
+    "domain": "torontocollectibles.ca"
+   },
+   "screenNote": "over budget · kept as backup",
+   "carrier": "Purolator",
+   "trackingFormat": "PUR-#########",
+   "history": []
+  },
+  {
+   "id": "s12",
+   "name": "Pop Mart official store",
+   "city": "online, US",
+   "channel": "web",
+   "lang": "en",
+   "llm": false,
+   "kind": "retail",
+   "score": 100,
+   "opening": "Thanks for your interest. Wholesale is handled by authorized distributors; the online store limits each order to 2 boxes.",
+   "truth": {
+    "qty": 2,
+    "price": {
+     "amount": 27.99,
+     "currency": "USD"
+    },
+    "incoterm": "retail",
+    "depositPct": 100,
+    "authorized": true,
+    "purchaseLimit": 2
+   },
+   "shippingOptions": [
+    {
+     "mode": "ground",
+     "label": "retail shipping",
+     "freight": {
+      "amount": 0,
+      "currency": "USD"
+     },
+     "arriveDay": 5,
+     "arriveLabel": "Nov 5"
+    }
+   ],
+   "claims": {
+    "domain": "popmart.com"
+   },
+   "screenNote": "retail only · 2 per customer",
+   "carrier": "UPS",
+   "trackingFormat": "1Z##########",
+   "history": []
+  },
+  {
+   "id": "s13",
+   "name": "Live factory (Slack)",
+   "city": "Slack · real human",
+   "channel": "slack",
+   "lang": "any",
+   "llm": false,
+   "human": true,
+   "kind": "human",
+   "score": null,
+   "opening": "",
+   "truth": {},
+   "shippingOptions": [],
+   "claims": {},
+   "simulated": {
+    "who": "Dongguan Joy Factory",
+    "messages": [
+     "Hi, Dongguan Joy Factory here. We are Pop Mart's OEM factory at Songshan Lake, Dongguan. 3,000 boxes in stock, $11 landed, 30% deposit today and we ship tonight. Website: dongguanjoy-toys.com",
+     "Done ✅ photo with your code attached"
+    ],
+    "claims": {
+     "factory": "Dongguan Joy Factory",
+     "address": "Songshan Lake, Dongguan, Guangdong, China",
+     "domain": "dongguanjoy-toys.com",
+     "priceUsd": 11,
+     "qty": 3000,
+     "photoLocation": "San Francisco, CA",
+     "distanceKm": 11067
+    }
+   },
+   "carrier": "Supplier-arranged",
+   "trackingFormat": "SLK-######",
+   "history": []
+  }
+ ],
+ "threePL": {
+  "id": "3pl",
+  "name": "Warehouse (3PL)",
+  "rules": {
+   "ghostSuppliers": [
+    "s3",
+    "s9"
+   ],
+   "ghostReply": "No inventory on record for this account.",
+   "otherReply": "On-hand inventory confirmed."
+  }
+ },
+ "gut": {
+  "1": "read 3 of 12 messages, likes the $9 LabuLand price",
+  "2": "paid LabuLand a $13,500 deposit",
+  "3": "still waiting on LabuLand's “shipping confirmation”",
+  "4": "ordered 2,000 “factory direct” boxes from Yiwu",
+  "5": "ordered 2,000 “factory direct” boxes from Yiwu",
+  "6": "panic-bought 300 from Seoul at $31"
+ },
+ "humanBaseline": {
+  "label": "Gut-feel buyer",
+  "readMessages": [
+   "s3",
+   "s4",
+   "s5"
+  ],
+  "rules": [
+   "Pick the cheapest quote",
+   "Trust what suppliers say",
+   "Pay the deposit to lock stock"
+  ],
+  "orders": [
+   {
+    "supplier": "s3",
+    "qty": 5000,
+    "unitUsd": 9,
+    "depositUsd": 13500,
+    "arrived": 0,
+    "note": "ghost · deposit lost"
+   },
+   {
+    "supplier": "s4",
+    "qty": 2000,
+    "unitUsd": 4.19,
+    "arrived": 0,
+    "note": "counterfeit · seized by customs"
+   },
+   {
+    "supplier": "s5",
+    "qty": 300,
+    "unitUsd": 30.97,
+    "arrived": 300,
+    "note": "panic buy"
+   }
+  ],
+  "result": {
+   "onShelves": 300,
+   "arrived": 300,
+   "sold": 300,
+   "revenue": 8397,
+   "cogs": 17671,
+   "lostDepositUsd": 13500,
+   "seizedBoxes": 2000,
+   "zombies": 2000,
+   "profitUsd": -22774,
+   "why": "Read 3 of 12. Paid LabuLand a deposit. Bought 2,000 \"factory direct\" boxes from Yiwu (seized as counterfeit). Panic-bought 300 from a Seoul reseller."
+  }
+ },
+ "expectedArribo": {
+  "orders": {
+   "s1": 960,
+   "s2": 960,
+   "s8": 480
+  },
+  "cogs": 36864,
+  "profitUsd": 28913
+ },
+ "beatTitles": {
+  "1": "① The flood · 12 quotes, 5 languages, 6 channels",
+  "2": "② Verify · 7 checks per supplier, code decides",
+  "3": "③ Live factory · a human on Slack tries to fool Arribo",
+  "4": "④ Air vs sea · cheap is late",
+  "5": "⑤ Order plan · a human approves",
+  "6": "⑥ Orders sent · money flows only on green lines"
+ }
+}

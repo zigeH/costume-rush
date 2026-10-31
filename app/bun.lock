@@ -1,0 +1,19 @@
+{
+  "lockfileVersion": 2,
+  "configVersion": 1,
+  "workspaces": {
+    "": {
+      "name": "costume-rush-app",
+      "dependencies": {
+        "@relaycast/sdk": "latest",
+      },
+    },
+  },
+  "packages": {
+    "@relaycast/sdk": ["@relaycast/sdk@12.3.0", "", { "dependencies": { "@relaycast/types": "12.3.0", "zod": "^4.3.6" } }, "sha512-LulrVwn1AMo0CDd82D8OEfjCHhSdbbQScXfacHluIYlmdH6WhPCfNHcycyTqA0r22Yf7c2m+beu3/KL1Jepx/Q=="],
+
+    "@relaycast/types": ["@relaycast/types@12.3.0", "", { "dependencies": { "zod": "^4.3.6" } }, "sha512-WEwRmURRE+hHxDOlXEqOR8QqMI8d9ME99bZ2zWWRm30klb/9fVh//Gjct0kyM3N33dK1R0wL8QXJ9C7oiCj25w=="],
+
+    "zod": ["zod@4.6.7", "", {}, "sha512-g8W2D2kU6a8untc053fX1uVBKzM7yqAxW/3zwk83+6RyF2+SKOuV+c0wBDhUwzV1PaGapmZH+rmcUzPf+3CGwg=="],
+  }
+}

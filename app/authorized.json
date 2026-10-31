@@ -1,0 +1,14 @@
+{
+  "brand": "Pop Mart",
+  "note": "Demo list (fictional-but-plausible). Pop Mart does NOT sell via 'factory direct' OEMs; any 'factory'/'OEM' claiming to make Labubu is unauthorized.",
+  "wholesaleUnitUsd": 23,
+  "floorUnitUsd": 13.8,
+  "authorized": [
+    { "name": "Pop Mart official store", "aliases": ["Pop Mart", "POP MART", "泡泡玛特", "popmart.com", "Pop Mart Americas"], "region": "global", "domain": "popmart.com" },
+    { "name": "Pacific Toy Distribution (US)", "aliases": ["Pacific Toy Distribution", "Pacific Toy"], "region": "US" },
+    { "name": "Shenzhen Paopao Wholesale", "aliases": ["Paopao Wholesale", "深圳泡泡批发"], "region": "CN" },
+    { "name": "Distribuidora Juguetes MX", "aliases": ["Juguetes MX"], "region": "MX" },
+    { "name": "Toronto Collectibles Supply", "aliases": ["Toronto Collectibles"], "region": "CA" }
+  ],
+  "redFlags": ["factory direct", "factory", "oem", "工厂", "厂家直销", "源头工厂", "replica", "1:1"]
+}

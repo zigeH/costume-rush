@@ -1,0 +1,7 @@
+.env
+node_modules
+.DS_Store
+app/.journal.json
+app/files/
+actor/.durable-actors/
+*.log
